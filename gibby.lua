@@ -1,6 +1,12 @@
 -- a
 -- a
 -- a
+-- a
+-- a
+-- a
+-- a
+-- a
+-- a
 -- hahahahahahahahahhahahahahahahahahahahaahhahahahahaahhahahahahahahahahahahahahahahahahahahahahahahahahahahahahahaha
 -- ahahhahaahahahahahahahhaahahahahahahahHhaHHHHHHHhHahahahahahahahahahahahahahahHHHHahHHHHHahahahahahahahahahahhahahahH-- hahahahahahahahhahHHHHHHHAHHHAhahahahahahhahahaahahahhaahhahahahahahahahaha
 -- hahahahahahahahhahHHHHHHHAHHHAhahahahahahhahahaahahahhaahhahahahahahahahaha
@@ -1140,80 +1146,6 @@ SilentTab:CreateToggle({
         ESPEnabled = v
     end
 })
-
-SilentTab:CreateToggle({
-    Name = "Bring All Players",
-    CurrentValue = false,
-    Callback = function(v)
-        Enabled = v
-        if v then
-            for _, plr in Players:GetPlayers() do
-                if plr ~= LP and plr.Character then
-                    OldPositions[plr] = plr.Character.HumanoidRootPart.CFrame
-                    plr.Character.HumanoidRootPart.CFrame = LP.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)  -- Front
-                end
-            end
-        else
-            for plr, cf in OldPositions do
-                if plr.Character then
-                    plr.Character.HumanoidRootPart.CFrame = cf
-                end
-            end
-            OldPositions = {}
-        end
-    end
-})
-
--- Follow LP if moving
-RunService.Heartbeat:Connect(function()
-    if Enabled then
-        for _, plr in Players:GetPlayers() do
-            if plr ~= LP and plr.Character then
-                plr.Character.HumanoidRootPart.CFrame = LP.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)
-            end
-        end
-    end
-end)
-
--- Auto on join/respawn
-Players.PlayerAdded:Connect(function(plr)
-    plr.CharacterAdded:Connect(function()
-        if Enabled then
-            task.wait(0.1)
-            if plr.Character then
-                OldPositions[plr] = plr.Character.HumanoidRootPart.CFrame
-                plr.Character.HumanoidRootPart.CFrame = LP.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)
-            end
-        end
-    end)
-end)
-
--- LP respawn reset
-LP.CharacterAdded:Connect(function()
-    if Enabled then
-        task.wait(0.5)
-        for _, plr in Players:GetPlayers() do
-            if plr ~= LP and plr.Character then
-                plr.Character.HumanoidRootPart.CFrame = LP.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)
-            end
-        end
-    end
-end)
-
--- All players on load
-for _, plr in Players:GetPlayers() do
-    if plr ~= LP then
-        plr.CharacterAdded:Connect(function()
-            if Enabled then
-                task.wait(0.1)
-                if plr.Character then
-                    OldPositions[plr] = plr.Character.HumanoidRootPart.CFrame
-                    plr.Character.HumanoidRootPart.CFrame = LP.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)
-                end
-            end
-        end)
-    end
-end
 
 --// TEAM TOGGLES (AUTO)
 local function addTeam(team)
